@@ -2,45 +2,47 @@
 
 using namespace std;
 
-bool Stack::push(string &val)
+//push to the stack
+bool Stack::push(string item)
 {
-
-if (top >= (MAX - 1)) {
-cout << "Stack Overflow";
+    //make sure we are not out of bounds
+if (top >= (MAX-1)){
+cout <<"Stack Overflow";
 return false;
-  }
+
+}
 else {
-a[++top] = val;
-cout << val << " pushed into stack";
+    //increment and store input in stack
+myStack[++top] = item;
 return true;
 }
-bool Stack::pop()
+}
+void Stack::pop()
 {
+    //check bounds
 if (top < 0) {
-cout <<"Stack underflow";
-return 0;
-
+cout <<"Stack Underflow";
 }
 else {
-int x = a[top--];
-return x;
+    //decrement top
+string item = myStack[top--];
 }
-}
-
-
-bool Stack::peek()
-{
-
-if (top <0) {
-cout <<"Stack is empy";
-return 0;
 
 }
 
-else {
-int x = a[top];
-return x;
+bool Stack::Display(){
+    //loop and display all elements of stack
+for(int i=top;i>=0;i--){
+cout<<myStack[i];
+cout<<endl;
 }
+return true;
+}
+
+bool Stack::Delete(){
+    //clean up
+delete [] myStack;
+return true;
 }
 
 
