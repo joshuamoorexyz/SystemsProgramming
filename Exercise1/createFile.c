@@ -1,9 +1,8 @@
 
 
 //student NetID: jjm702
- //* Compiler Used: vim with g++
+ //* Compiler Used: vim with gcc
  //*  * Program Description:This program generates a set of random numbers from three rangers and stores them in a binary file usying system calls
-
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -14,138 +13,505 @@
 #include<unistd.h>
 #include<sys/types.h>
 #include<errno.h>
-
-#define BUF_SIZE 1024
-
-//createFile 
-//createFile <filename> <number>
-//createFile <filename> <number> <low value> <middle value> <high value>
+#include <stdint.h>
 
 
+#define FLOAT_TO_INT(x) ((x)>=0?(int)((x)+0.5):(int)((x)-0.5))
 
-//<filename> - name of the binary file, if the value isn't specified default it to flowData.dat
-//<number> - total number of values to generate, if this value isn't specified default it to 60
-//<low value> - the average value of the lower range, if this value isn't specified default it to 5
-//<middle value> - the average value of the middle range, if this value isn't specified default it to 10
-//<high value> - the average value of the upper range, if this value isn't specified default it to 15
-
+uint8_t read_file_byte(FILE *fptr){
+  uint8_t data;
+  fread(&data, 1, 1, fptr);
+  return data;
+}
 int main( int argc, char *argv[] ){
-int inputFd, outputFd, openFlags;
-mode_t filePerms;
-ssize_t numRead;
-char buf[BUF_SIZE];
-
-srand(time(NULL));
-
-//define filedescriptors
-inputFd = open(argv[1], O_RDONLY);
-
-if (inputFd == -1){
-    perror("open for read");
-    exit(EXIT_FAILURE);
-}
-
-openFlags = O_CREAT | O_WRONLY | O_TRUNC;
-filePerms = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
-
-outputFd = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
-
-outputFd = open(argv[2], openFlags, filePerms);
-
-if (outputFd ==-1)
-{
-    perror("open for write");
-    exit(EXIT_FAILURE);
-}
 
 
-// while ((numRead = read(inputFd, buf, BUF_SIZE)) >0){
-//     if(write(outputFd,buf,numRead)!=numRead){
-//         perror("write");
-//         exit(EXIT_FAILURE);
-//     }
-// }
-if (numRead ==-1)
-{
-    perror("read");
-    exit(EXIT_FAILURE);
-}
 
-close(inputFd);
-close(outputFd);
+
+
+FILE *fptr;
+
+
+
+
+
+
 
 //process commandline arguments
-if(argc==0)
+if(argc==1)
 {
     char *filename="flowData.dat";
     int number=60;
     int lowvalue=5;
     int middlevalue=10;
     int highvalue=15;
+    int count=0;
+    char *bytes[4];
 
-int random_number0 = rand() % 100 + 0;
 
-//needs to be between -.5 and .5
-signed int random_number1 = 1 *rand() /(RAND_MAX/2)-1;
+fptr=fopen(filename,"w");
 
+
+//use union to convert to 4 byte char buf
+//   for(int i=0;i<4;i++){
+//  newInt1[i]=dtob.bytes[i];
+// printf("%s",newInt1);
+
+//  }
 
 //loop until all the numbers are written to the file 
 
-//write to the file
-ssize_t write(int fd,const void* buffer,size_t count);
+while(count<=number){
+
+char c='\n';
+//printf("%s","HEY");
+    srand(time(NULL));
 
 
 
-//close the file
-int close(int fd);
+int random_number0 = rand() % 100 + 0;
+
+//printf("%i", random_number0);
+ //printf("\n");
+
+
+//needs to be between -.5 and .5
+float LO=-.5;
+float HI=.5;
+
+
+
+    float scale = rand() / (float) RAND_MAX; 
+    float r3=LO + scale * ( HI - LO );      
+//printf("%f",r3);
+// printf("\n");
+
+    float newVal=random_number0+r3*100;
+    unsigned int newInt;
+    newInt=FLOAT_TO_INT(newVal);
+//printf("%i", newInt);
+ //printf("\n");
+
+unsigned long n = newInt;
+
+
+*bytes[0] = (n >> 24) & 0xFF;
+bytes[1] =  calloc(4,(n >> 16) & 0xFF);
+bytes[2] = calloc(4,(n >> 8) & 0xFF);
+bytes[3] = calloc(4,(n) & 0xFF);
+
+
+printf("%p %p %p %p", bytes[3], bytes[2], bytes[1], bytes[0]);
+ 
+
+if(*bytes[3]>=0 && *bytes[3]<=15){
+ 
+
+    
+
+ //printf("%s", "Testing");
+ //printf("\n");
+
+ //write to file
+
+
+ 
+       putw(lowvalue, fptr);
+       putc(c,fptr);
+      
+
+
+}
+if(*bytes[3]>=85 && *bytes[3]<=100){
+
+//printf("%s", "Testing1");
+ //rintf("\n");
+
+
+//write to file
+//write to file
+//   if (fptr != NULL) {
+//     printf("File created successfully!\n");
+//   }
+//   else {
+//     printf("Failed to create the file.\n");
+//     // exit status for OS that an error occurred
+//     return -1;
+//   }
+       putw(highvalue, fptr);
+             putc(c,fptr);
+// inBytes(filename, number);
+//fclose(fptr);
+ //inBytes(filename, number);
+}
+if(*bytes[3]>15 && *bytes[3]<85){
+//mid value
+
+ //printf("%s", "Testing2");
+ //printf("\n");
+
+
+//write to file
+  //fptr = fopen(filename, "w");
+//   if (fptr != NULL) {
+//     printf("File created successfully!\n");
+//   }
+//   else {
+//     printf("Failed to create the file.\n");
+//     // exit status for OS that an error occurred
+//     return -1;
+//   }
+       putw(lowvalue, fptr);
+       putc(c,fptr);
+      // fclose(fptr);
+ //inBytes(filename, number);
+
+}
+
+count++;
+
+
+}
+
+
+fclose(fptr);
+  fptr=fopen(filename, "rb");
+  unsigned short sample;
+  fseek(fptr, 0, SEEK_END);
+  long tam = ftell(fptr);
+  rewind(fptr);
+  long c = 0;
+  while(c!=tam){
+    sample = read_file_byte(fptr);
+    printf("\n");
+    printf("%i", *bytes[3]);
+    c++;
+  }
+  fclose(fptr);
 
 
 
 }
-if(argc ==2){
+
+
+if(argc ==3){
     //printf("You gave %s\n", argv[1]);
-char *filename=argv[0];
-int arg2=atoi(argv[1]);
+char *filename=argv[1];
+int number=atoi(argv[2]);
+    int lowvalue=5;
+    int middlevalue=10;
+    int highvalue=15;
+    int count=0;
+   
+char *bytes[4];
+FILE *fptr;
+
+
+while(count<=number){
+
+char c='\n';
+//printf("%s","HEY");
+    srand(time(NULL));
+
+
+
+int random_number0 = rand() % 100 + 0;
+
+//printf("%i", random_number0);
+ //printf("\n");
+
+
+//needs to be between -.5 and .5
+float LO=-.5;
+float HI=.5;
+
+
+
+    float scale = rand() / (float) RAND_MAX; 
+    float r3=LO + scale * ( HI - LO );      
+//printf("%f",r3);
+// printf("\n");
+
+    float newVal=random_number0+r3*100;
+    unsigned int newInt;
+    newInt=FLOAT_TO_INT(newVal);
+//printf("%i", newInt);
+ //printf("\n");
+
+unsigned long n = newInt;
+
+
+*bytes[0] = (n >> 24) & 0xFF;
+bytes[1] =  calloc(4,(n >> 16) & 0xFF);
+bytes[2] = calloc(4,(n >> 8) & 0xFF);
+bytes[3] = calloc(4,(n) & 0xFF);
+
+
+printf("%p %p %p %p", bytes[3], bytes[2], bytes[1], bytes[0]);
+ 
+
+if(*bytes[3]>=0 && *bytes[3]<=15){
+ 
+
+    
+
+ //printf("%s", "Testing");
+ //printf("\n");
+
+ //write to file
+
+
+ 
+       putw(lowvalue, fptr);
+       putc(c,fptr);
+      
+
+
+}
+if(*bytes[3]>=85 && *bytes[3]<=100){
+
+//printf("%s", "Testing1");
+ //rintf("\n");
+
+
+//write to file
+//write to file
+//   if (fptr != NULL) {
+//     printf("File created successfully!\n");
+//   }
+//   else {
+//     printf("Failed to create the file.\n");
+//     // exit status for OS that an error occurred
+//     return -1;
+//   }
+       putw(highvalue, fptr);
+             putc(c,fptr);
+// inBytes(filename, number);
+//fclose(fptr);
+ //inBytes(filename, number);
+}
+if(*bytes[3]>15 && *bytes[3]<85){
+//mid value
+
+ //printf("%s", "Testing2");
+ //printf("\n");
+
+
+//write to file
+  //fptr = fopen(filename, "w");
+//   if (fptr != NULL) {
+//     printf("File created successfully!\n");
+//   }
+//   else {
+//     printf("Failed to create the file.\n");
+//     // exit status for OS that an error occurred
+//     return -1;
+//   }
+       putw(lowvalue, fptr);
+       putc(c,fptr);
+      // fclose(fptr);
+ //inBytes(filename, number);
+
+}
+
+count++;
+
+
+}
+
+
+fclose(fptr);
+  fptr=fopen(filename, "rb");
+  unsigned short sample;
+  fseek(fptr, 0, SEEK_END);
+  long tam = ftell(fptr);
+  rewind(fptr);
+  long c = 0;
+  while(c!=tam){
+    sample = read_file_byte(fptr);
+    printf("\n");
+    printf("%i", *bytes[3]);
+    c++;
+  }
+  fclose(fptr);
+
+
+
+
+
 
 int random_number0 = rand() % 100 + 0;
 
 
-//needs to be between -.5 and .5
-signed int random_number1 = 1 *rand() /(RAND_MAX/2)-1;
 
 
 
 
+return 0;
 
 
 }
-else if(argc ==5){
+ if(argc ==6){
     //printf("You gave %s\n", argv[1]);
-char *filename=argv[0];
-int arg2=atoi(argv[1]);
-int arg3=atoi(argv[2]);
-int arg4=atoi(argv[3]);
-int arg5=atoi(argv[4]);
+char *filename=argv[1];
+int number=atoi(argv[2]);
+    int lowvalue=atoi(argv[3]);
+    int middlevalue=atoi(argv[4]);
+    int highvalue=atoi(argv[5]);
+    int count=0;
+char *bytes[4];
+
+
+   
+int random_number0 = rand() % 100 + 0;
+
+while(count<=number){
+
+char c='\n';
+//printf("%s","HEY");
+    srand(time(NULL));
+
+
 
 int random_number0 = rand() % 100 + 0;
 
+//printf("%i", random_number0);
+ //printf("\n");
+
 
 //needs to be between -.5 and .5
-signed int random_number1 = 1 *rand() /(RAND_MAX/2)-1;
+float LO=-.5;
+float HI=.5;
 
 
 
+    float scale = rand() / (float) RAND_MAX; 
+    float r3=LO + scale * ( HI - LO );      
+//printf("%f",r3);
+// printf("\n");
+
+    float newVal=random_number0+r3*100;
+    unsigned int newInt;
+    newInt=FLOAT_TO_INT(newVal);
+//printf("%i", newInt);
+ //printf("\n");
+
+unsigned long n = newInt;
 
 
+*bytes[0] = (n >> 24) & 0xFF;
+bytes[1] =  calloc(4,(n >> 16) & 0xFF);
+bytes[2] = calloc(4,(n >> 8) & 0xFF);
+bytes[3] = calloc(4,(n) & 0xFF);
+
+
+printf("%p %p %p %p", bytes[3], bytes[2], bytes[1], bytes[0]);
+ 
+
+if(*bytes[3]>=0 && *bytes[3]<=15){
+ 
+
+    
+
+ //printf("%s", "Testing");
+ //printf("\n");
+
+ //write to file
+
+
+ 
+       putw(lowvalue, fptr);
+       putc(c,fptr);
+      
 
 
 }
-else if(argc > 5){
+if(*bytes[3]>=85 && *bytes[3]<=100){
+
+//printf("%s", "Testing1");
+ //rintf("\n");
+
+
+//write to file
+//write to file
+//   if (fptr != NULL) {
+//     printf("File created successfully!\n");
+//   }
+//   else {
+//     printf("Failed to create the file.\n");
+//     // exit status for OS that an error occurred
+//     return -1;
+//   }
+       putw(highvalue, fptr);
+             putc(c,fptr);
+// inBytes(filename, number);
+//fclose(fptr);
+ //inBytes(filename, number);
+}
+if(*bytes[3]>15 && *bytes[3]<85){
+//mid value
+
+ //printf("%s", "Testing2");
+ //printf("\n");
+
+
+//write to file
+  //fptr = fopen(filename, "w");
+//   if (fptr != NULL) {
+//     printf("File created successfully!\n");
+//   }
+//   else {
+//     printf("Failed to create the file.\n");
+//     // exit status for OS that an error occurred
+//     return -1;
+//   }
+       putw(lowvalue, fptr);
+       putc(c,fptr);
+      // fclose(fptr);
+ //inBytes(filename, number);
+
+}
+
+count++;
+
+
+}
+
+
+fclose(fptr);
+  fptr=fopen(filename, "rb");
+  unsigned short sample;
+  fseek(fptr, 0, SEEK_END);
+  long tam = ftell(fptr);
+  rewind(fptr);
+  long c = 0;
+  while(c!=tam){
+    sample = read_file_byte(fptr);
+    printf("\n");
+    printf("%i", *bytes[3]);
+    c++;
+  }
+  fclose(fptr);
+
+
+//needs to be between -.5 and .5
+//signed int random_number1 = 1 *rand() /(RAND_MAX/2)-1;
+
+
+
+//printf("%s", "Testing5");
+
+
+
+return 0;
+
+}
+if(argc > 6){
     perror("Too many arguements supplied \n");
     exit(EXIT_FAILURE);
     
 }
-else if(argc <0){
+if(argc <0){
     perror("Too few arguements supplied \n");
     exit(EXIT_FAILURE);
 
@@ -156,10 +522,6 @@ else if(argc <0){
 
 
 
-    
-
-
-
 
 
 return 0;
@@ -167,43 +529,3 @@ return 0;
 
 
 
-
-
-//loop while all the numbers haven't been written to the file
-//
-//
-//generate a random number between 0 and 100 to determine which range to use
-//
-//
-//generate a random number between -.5 and .5 to create the offset
-//
-//
-//create the value to be stored by
-//
-//
-//adding the offset to the chosen range's average
-//
-//
-//multiplying the resulting number by 100
-//
-//
-//
-//truncating the number to an integer
-//
-//
-//use a union to convert the newly created integer to a 4 byte character buffer
-//
-//
-//
-//output the character buffer.
-//
-//
-//
-//
-//The odds of each range being written into the file of random numbers are fixed.
-//
-//The lower range is written into the file if a random number between 0 and 15 is generated;
-//
-//the upper range is written into the file if a random number between 85 and 100 is generated;
-//
-//all other values should be in the middle range.
