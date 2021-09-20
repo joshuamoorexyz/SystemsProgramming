@@ -1,3 +1,3 @@
- When is the start of the epoch\n
- How many penguins can fill up a barrel\n
- 5-2 =\n
+ When is the start of the epoch
+ How many penguins can fill up a barrel
+ 5-2 =

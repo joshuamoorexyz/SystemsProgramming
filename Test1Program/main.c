@@ -88,7 +88,7 @@ void signalHandler(int sig)
  */
 if(sig==SIGINT){
 char userstr[BUF_SIZE];
-write(STDOUT_FILENO, "Would you like to exit? (Y/n)\n",BUF_SIZE);
+//write(STDOUT_FILENO, "Would you like to exit? (Y/n)\n",BUF_SIZE);
 
 
 
@@ -105,7 +105,7 @@ if(strcmp(userstr,"n")==0){
   return;
 }
 else{
-write(STDOUT_FILENO, "Would you like to exit? (Y/n)\n",BUF_SIZE);
+//write(STDOUT_FILENO, "Would you like to exit? (Y/n)\n",BUF_SIZE);
 
 fgets (userstr,BUF_SIZE,stdin);
 if(strcmp(userstr,"Y")==0){
@@ -136,39 +136,102 @@ int readLine(int fd, char *line)
  * you passed in as line
  */
 
+int numRead;
 int i=0;
-fd=open("quest.txt",O_RDONLY);
+int sz;
+
+char *c = (char *) calloc(100, sizeof(char));
+ 
+fd = open("quest.txt", O_RDONLY);
+if (fd < 0) { perror("r1"); exit(1); }
+ 
+
+
 while(fd!=EOF){
 
+  sz = read(fd, c, 2);
 
 
 
+c[sz] = '\0';
 
-
-
-  if(=='\n'){
-    return 1;
-    break;
-  }
-  if(line[i]=='\r'){
-    i++;
-  }
-  else{
-    //store in array
-
-    i++;
-
-  }
-
- 
-return 1;
-
- 
-  
-
-
+if(c[0]=='\n'){
+  return 0;
 
 }
+if(c[0]=='\r'){
+
+return 0;
+}
+//printf("%c",c[sz-1]);
+
+printf("%s", c);
+}
+
+return 0;}
+
+
+
+
+
+ //fd=open("quest.txt",O_RDONLY);
+//printf("SOmethingadsfahdfasdf");
+
+// char buf[BUF_SIZE];
+
+
+// numRead=read(fd,buf,1);
+// //printf("%i",numRead);
+
+// if(numRead==0){
+//   //eof
+//   return 0;
+// }
+// if(numRead==-1){
+//   perror("read");
+//   exit(EXIT_FAILURE);
+// }
+// else{
+// //printf("SOmethingadsfahdfasdf");
+
+
+// for(i=0;i<BUF_SIZE;++i){
+  
+// if(buf[0]=='\n'){
+//   break;
+// }
+// if(buf[0]=='\r'){
+//   break;
+// }
+// else{
+ 
+// //line[BUF_SIZE-1]='\0';
+// printf("%c",buf[i]);
+
+// }
+// }}return 1;}
+// for(i=0;i<BUF_SIZE+1;i++){
+// // printf("The input data was: %c\n", buffer[i]);
+
+// // char c=getchar();
+// if(buffer[i]=='\n'){
+//   break;
+// }
+// if(buffer[i]=='\r'){
+//   break;
+// }
+
+// return 1;
+
+// }
+//  buffer[BUF_SIZE]='\0';
+//  for(int j=0;j<BUF_SIZE+1;j++){
+//    printf("%c",buffer[j]);
+//  }
+// return 0;
+
+
+
 
 
 
@@ -184,8 +247,6 @@ return 1;
 //   int r=read(fd,line,1);
  
  
- return 0;
-}
 
 
 
@@ -328,12 +389,8 @@ if(ansFd ==-1){
     *
     * read the first question, answer pairing prior to enter'ing the loop
     */
-
-  
-  readQA(questFd, ansFd, quest, ans);
   while (1)
     {
-     
       /* output the current question */
       myPrint("#");
       myPrintInt(question);
@@ -354,9 +411,8 @@ setitimer(ITIMER_REAL, &itmr, NULL);
 
       /* read in the user's response, this is systems programming so don't use 
        * scanf */
-
-fgets(quest, BUF_SIZE, stdin);
-
+//char *c = (char *) calloc(100, sizeof(char));
+//numRead=read(questFd,c,2);
 
  /* Problem 10 – read a buffer from STDIN */
 
@@ -371,7 +427,9 @@ fgets(quest, BUF_SIZE, stdin);
        * if the timedout flag was set, inform the user that time is up 
        * then go to the next question
        */
+     
       if (numRead == 0) break;
+   
       if (numRead == -1)
 	{
 	  if (errno == EINTR)
