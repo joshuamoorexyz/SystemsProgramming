@@ -14,6 +14,9 @@
 #include <string.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <readline/readline.h>
+       #include <readline/history.h>
+
 
 /* Problem 1 – complete the list of include files */
 
@@ -135,116 +138,26 @@ int readLine(int fd, char *line)
  * reading in 1 character at a time and then adding them to the array
  * you passed in as line
  */
+ int size;
+fd=open("quest.txt",O_RDONLY);
 
-int numRead;
-int i=0;
-int sz;
+while((size=read(fd,line,BUF_SIZE))){
 
-char *c = (char *) calloc(100, sizeof(char));
- 
-fd = open("quest.txt", O_RDONLY);
-if (fd < 0) { perror("r1"); exit(1); }
- 
+write(STDOUT_FILENO,line,size);
 
-
-while(fd!=EOF){
-
-  sz = read(fd, c, 2);
-
-
-
-c[sz] = '\0';
-
-if(c[0]=='\n'){
-  return 0;
-
+  
 }
-if(c[0]=='\r'){
+
+
+
+
 
 return 0;
 }
-//printf("%c",c[sz-1]);
-
-printf("%s", c);
-}
-
-return 0;}
 
 
 
 
-
- //fd=open("quest.txt",O_RDONLY);
-//printf("SOmethingadsfahdfasdf");
-
-// char buf[BUF_SIZE];
-
-
-// numRead=read(fd,buf,1);
-// //printf("%i",numRead);
-
-// if(numRead==0){
-//   //eof
-//   return 0;
-// }
-// if(numRead==-1){
-//   perror("read");
-//   exit(EXIT_FAILURE);
-// }
-// else{
-// //printf("SOmethingadsfahdfasdf");
-
-
-// for(i=0;i<BUF_SIZE;++i){
-  
-// if(buf[0]=='\n'){
-//   break;
-// }
-// if(buf[0]=='\r'){
-//   break;
-// }
-// else{
- 
-// //line[BUF_SIZE-1]='\0';
-// printf("%c",buf[i]);
-
-// }
-// }}return 1;}
-// for(i=0;i<BUF_SIZE+1;i++){
-// // printf("The input data was: %c\n", buffer[i]);
-
-// // char c=getchar();
-// if(buffer[i]=='\n'){
-//   break;
-// }
-// if(buffer[i]=='\r'){
-//   break;
-// }
-
-// return 1;
-
-// }
-//  buffer[BUF_SIZE]='\0';
-//  for(int j=0;j<BUF_SIZE+1;j++){
-//    printf("%c",buffer[j]);
-//  }
-// return 0;
-
-
-
-
-
-
-
-
-
-
-//  int i=0;
-
-//  char *string=(char *)malloc(strlen(line)* sizeof(char));
-
-// while(i<strlen(line)){
-//   int r=read(fd,line,1);
  
  
 
@@ -389,6 +302,7 @@ if(ansFd ==-1){
     *
     * read the first question, answer pairing prior to enter'ing the loop
     */
+    readQA( questFd,  ansFd,quest, ans);
   while (1)
     {
       /* output the current question */
